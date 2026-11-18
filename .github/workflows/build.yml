@@ -15,7 +15,10 @@ jobs:
           distribution: temurin
           java-version: '17'
       - name: Install Android SDK 35
-        run: sdkmanager 'platforms;android-35' 'build-tools;35.0.0'
+        run: |
+          SDKMGR="$ANDROID_HOME/cmdline-tools/latest/bin/sdkmanager"
+          [ -x "$SDKMGR" ] || SDKMGR="$ANDROID_HOME/cmdline-tools/16.0/bin/sdkmanager"
+          yes | "$SDKMGR" 'platforms;android-35' 'build-tools;35.0.0'
       - name: Set up Gradle
         uses: gradle/actions/setup-gradle@v4
         with:
@@ -30,6 +33,9 @@ jobs:
             app/build/outputs/apk/debug/app-debug.apk
             app/build/outputs/apk/release/app-release-unsigned.apk
           if-no-files-found: error
+
+
+
 
 
 
